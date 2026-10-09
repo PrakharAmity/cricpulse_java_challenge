@@ -132,4 +132,5 @@ When all 6 bugs are fixed, all tests pass with exit code `0`:
 
 For full diagnosis, reproduction steps, and expected behaviors, see [`AI.md`](file:///c:/Users/prakh/Documents/Codex/2026-10-07/you-are-an-expert-application-engineer/outputs/cricpulse-java-challenge/AI.md).
 #   c r i c p u l s e _ j a v a _ c h a l l e n g e  
+ #   c r i c p u l s e _ j a v a _ c h a l l e n g e  
  

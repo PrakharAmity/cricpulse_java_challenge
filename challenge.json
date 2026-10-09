@@ -1,0 +1,10 @@
+{
+  "challenge_id": "cricpulse-live-analytics-java",
+  "runtime_config": {
+    "runtime_type": "java-maven",
+    "install_command": "mvn clean compile",
+    "start_command": "mvn spring-boot:run",
+    "test_command": "./tests/run_tests.sh",
+    "ports": [{ "container_port": 5000, "type": "preview" }]
+  }
+}

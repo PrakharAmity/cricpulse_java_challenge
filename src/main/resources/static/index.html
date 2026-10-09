@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CricPulse | Live Match Center & Cricket Analytics</title>
+  <meta name="description" content="Live cricket match center with over-by-over momentum charts, partnership graph network, rolling run rates, and fan zone.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="logo">◉</span>
+    <span>cric<span>pulse</span><small>LIVE MATCH CENTER</small></span>
+  </div>
+  <nav>
+    <a class="active" href="#match-center">MATCH CENTER</a>
+    <a href="#tournaments">TOURNAMENTS</a>
+    <a href="#players">PLAYERS</a>
+  </nav>
+  <div class="top-right">
+    <span class="live"><i></i> LIVE</span>
+    <button id="login-open" class="login-button">Sign in</button>
+    <span id="user-badge" class="user-badge">Guest</span>
+  </div>
+</header>
+
+<main class="page" id="match-center">
+  <section class="match-banner">
+    <div class="match-meta">
+      <span class="series">T20 WORLD CUP · SUPER 8</span>
+      <span class="venue">Kensington Oval, Bridgetown <b>·</b> 18:30 IST</span>
+    </div>
+    <div class="teams">
+      <div class="team">
+        <span class="flag india">IND</span>
+        <div>
+          <b>INDIA</b>
+          <small>2nd INNINGS</small>
+        </div>
+        <strong id="score">161<span>/3</span></strong>
+      </div>
+      <div class="versus">VS</div>
+      <div class="team opponent">
+        <span class="flag aus">AUS</span>
+        <div>
+          <b>AUSTRALIA</b>
+          <small>1st INNINGS</small>
+        </div>
+        <strong>210<span>/7</span></strong>
+      </div>
+    </div>
+    <div class="match-footer">
+      <span class="status"><i></i> INDIA NEED 50 RUNS FROM 48 BALLS</span>
+      <span>CRR <b>13.42</b></span>
+      <span>REQ <b>6.25</b></span>
+      <span>WIN PROBABILITY <b class="green">IND 78%</b></span>
+    </div>
+  </section>
+
+  <div class="content">
+    <section class="main-column">
+      <!-- Innings Momentum Card -->
+      <section class="card score-card" id="momentum">
+        <div class="card-head">
+          <div>
+            <span class="kicker">INNINGS MOMENTUM</span>
+            <h2>Run rate, over by over</h2>
+          </div>
+          <div class="segmented">
+            <button class="sel">Overs</button>
+            <button>Wickets</button>
+          </div>
+        </div>
+        <div class="chart" id="chart"></div>
+        <div class="chart-legend">
+          <span><i class="dot blue"></i> Runs per over</span>
+          <span class="target-line">Target pace</span>
+          <span id="stretch" class="stretch-badge">BEST 6 OVERS &nbsp; 86 RUNS</span>
+        </div>
+      </section>
+
+      <!-- Ball-by-ball Feed Card -->
+      <section class="card feed-card">
+        <div class="card-head">
+          <div>
+            <span class="kicker">BALL-BY-BALL</span>
+            <h2>India innings <span class="muted">· 12.0 overs</span></h2>
+          </div>
+          <button class="text-button">Full scorecard ↗</button>
+        </div>
+        <div class="over-highlight">
+          <span class="over-label">OVER 12</span>
+          <div class="balls">
+            <b class="six">6</b>
+            <b class="four">4</b>
+            <b>1</b>
+            <b class="six">6</b>
+            <b class="six">6</b>
+            <b>1</b>
+          </div>
+          <strong>24 <small>RUNS</small></strong>
+        </div>
+        <div class="commentary">
+          <span class="comment-icon">✦</span>
+          <p><b>12.6 · SIX!</b> Pandya launches it high over long-on. India finish the over in style, taking 24 from the last six deliveries.</p>
+          <small>Updated just now</small>
+        </div>
+        <div class="batter-table">
+          <div class="batter-row table-head">
+            <span>BATTER</span><span>R</span><span>B</span><span>4s</span><span>6s</span><span>SR</span>
+          </div>
+          <div class="batter-row">
+            <b>V. Kohli <i>not out</i></b>
+            <strong>41</strong><span>28</span><span>3</span><span>1</span><span>146.4</span>
+          </div>
+          <div class="batter-row striker">
+            <b>H. Pandya <i>not out · on strike</i></b>
+            <strong>32</strong><span>12</span><span>2</span><span>3</span><span>266.7</span>
+          </div>
+        </div>
+        <div class="feed-list" id="feed-list"></div>
+      </section>
+    </section>
+
+    <aside class="side-column">
+      <!-- Rolling Run Rate Card -->
+      <section class="card rate-card">
+        <div class="card-head">
+          <div>
+            <span class="kicker">LIVE FORM</span>
+            <h2>Rolling run rate</h2>
+          </div>
+          <span class="pulse">● LIVE</span>
+        </div>
+        <div class="rate-number" id="rolling-rate">13.42<span> / over</span></div>
+        <div class="rate-caption">Last 3 overs <span id="rate-delta">−2.08 vs innings avg</span></div>
+        <div class="mini-bars" id="mini-bars"></div>
+        <div class="rate-foot">
+          <span>INNINGS AVG <b id="innings-average">13.42</b></span>
+          <span>LAST 3 OVERS <b id="last-three">11.33</b></span>
+        </div>
+      </section>
+
+      <!-- Fan Zone Poll Card -->
+      <section class="card poll-card">
+        <div class="poll-heading">
+          <div>
+            <span class="kicker">FAN ZONE</span>
+            <h2>Who takes Player of the Match?</h2>
+          </div>
+          <span class="poll-icon">◉</span>
+        </div>
+        <div class="poll-status" id="poll-rate-info">Rate limit: 3 votes per fan window</div>
+        <div id="poll-options">
+          <button class="poll-option" data-choice="Kohli">
+            <span class="avatar kohli">VK</span>
+            <span>Virat Kohli</span>
+            <b>34%</b>
+            <i style="width:34%"></i>
+          </button>
+          <button class="poll-option" data-choice="Pandya">
+            <span class="avatar pandya">HP</span>
+            <span>Hardik Pandya</span>
+            <b>29%</b>
+            <i style="width:29%"></i>
+          </button>
+          <button class="poll-option" data-choice="Jadeja">
+            <span class="avatar jadeja">RJ</span>
+            <span>Ravindra Jadeja</span>
+            <b>21%</b>
+            <i style="width:21%"></i>
+          </button>
+          <button class="poll-option" data-choice="Other">
+            <span class="avatar other">••</span>
+            <span>Someone else</span>
+            <b>16%</b>
+            <i style="width:16%"></i>
+          </button>
+        </div>
+        <div class="poll-foot">
+          <span id="votes-cast-label">2,481 votes</span>
+          <span id="active-user-status">Active: Guest (Sign in to test)</span>
+        </div>
+        <div class="poll-quick-switch">
+          <button id="switch-fan1" type="button">Fan 1 (Aarav)</button>
+          <button id="switch-fan2" type="button">Fan 2 (Riya)</button>
+          <button id="switch-player" type="button">Player (Rohit)</button>
+        </div>
+      </section>
+
+      <!-- Player Workspace Note Card -->
+      <section class="card player-workspace" id="player-workspace">
+        <div class="card-head">
+          <div>
+            <span class="kicker">PLAYER WORKSPACE <span class="role-badge player">PLAYER ONLY</span></span>
+            <h2>Focus note</h2>
+          </div>
+          <span class="pulse" id="note-author-badge">NOT SIGNED IN</span>
+        </div>
+        <small class="workspace-policy">Policy: Only player role may edit. Fan edits must be rejected.</small>
+        <textarea id="player-note" placeholder="Enter focus note...">Play straight early; accelerate after the powerplay.</textarea>
+        <button class="save-note" id="save-note">Save note</button>
+      </section>
+    </aside>
+  </div>
+
+  <!-- Partnership Network Card -->
+  <section class="card partnership-card" id="partnerships">
+    <div class="card-head">
+      <div>
+        <span class="kicker">PLAYER CONNECTIONS</span>
+        <h2>Partnership chain <span class="muted">· runs shared</span></h2>
+      </div>
+      <div class="chain-note" id="chain-note">
+        <i>⚡</i> Strongest chain <b id="chain-strength-display">20 runs bottleneck</b>
+        <span id="chain-path-display">[Path: Rohit → Kohli → Jadeja]</span>
+      </div>
+    </div>
+    <!-- Reachability status banner -->
+    <div class="reachability-banner" id="reachability-banner">
+      <span class="reachability-icon">💡</span>
+      <span id="reachability-status">Click any player node below to test reachability scan via partnership graph.</span>
+    </div>
+    <div class="partnership-graph" id="partnership-graph">
+      <svg class="graph-svg" id="graph-svg"></svg>
+      <div class="graph-badges" id="graph-badges"></div>
+      <div class="graph-nodes" id="graph-nodes"></div>
+    </div>
+    <div class="graph-foot">
+      <span>Each link shows runs scored together at the crease · SVG vector connections</span>
+      <button class="text-button" id="scan-partnerships-btn">Scan Rohit's Reachable Network ↗</button>
+    </div>
+  </section>
+
+  <footer>
+    <span>CRICPULSE <b>DATA STUDIO</b></span>
+    <span>Ball-by-ball data refreshes automatically · 12.0 overs</span>
+    <span>Match data by CricPulse Live</span>
+  </footer>
+</main>
+
+<!-- Login Modal -->
+<div class="modal hidden" id="login-modal">
+  <div class="modal-card">
+    <button class="modal-close" id="login-close">×</button>
+    <span class="kicker">CRICPULSE ACCOUNT</span>
+    <h2>Welcome to the crease</h2>
+    <p>Sign in to vote in fan polls or access your player workspace.</p>
+    <label>
+      ACCOUNT
+      <select id="account">
+        <option value="fan">Fan account 1 · Aarav Mehta</option>
+        <option value="fan2">Fan account 2 · Riya Sen</option>
+        <option value="player">Player workspace · Rohit Sharma</option>
+      </select>
+    </label>
+    <label>
+      PASSWORD
+      <input id="password" type="password" placeholder="Enter password" value="fanpass">
+    </label>
+    <button class="primary" id="login-submit">Sign in securely <span>→</span></button>
+    <small class="demo-help">Accounts: coverdrive for rohit | fanpass for fan / fan2</small>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="./app.js"></script>
+</body>
+</html>

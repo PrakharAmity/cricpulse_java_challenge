@@ -1,0 +1,17 @@
+# Maven build artifacts
+target/
+*.class
+
+# IDE and Editor configurations
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
