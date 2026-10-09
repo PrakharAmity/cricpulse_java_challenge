@@ -130,7 +130,3 @@ When all 6 bugs are fixed, all tests pass with exit code `0`:
 5. **Player Focus Note Access Control** (`PlayerAccessService.java`): Erroneously allows `"fan"` role to modify player-only strategy notes.
 6. **Fan Poll Rate Limiter** (`PollLimiterService.java`): Tracks a single global counter instead of rate-limiting per `userId`.
 
-For full diagnosis, reproduction steps, and expected behaviors, see [`AI.md`](file:///c:/Users/prakh/Documents/Codex/2026-10-07/you-are-an-expert-application-engineer/outputs/cricpulse-java-challenge/AI.md).
-#   c r i c p u l s e _ j a v a _ c h a l l e n g e  
- #   c r i c p u l s e _ j a v a _ c h a l l e n g e  
- 
