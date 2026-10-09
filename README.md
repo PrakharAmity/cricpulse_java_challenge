@@ -1,118 +1,26 @@
-# CricPulse — Java Edition (`cricpulse-java-challenge`)
+# CricPulse — Live Match Center & Cricket Analytics
 
-A 100% faithful Java edition of the **CricPulse** live match center and cricket analytics challenge. Built with **Java 17+** and **Spring Boot 3.2.5**, running on port `5000` (`server.port=5000`).
-
-The application mirrors the Python/Flask and C++ CricPulse applications in data structures, REST API endpoints, web dashboard interface, strict JSON test telemetry, and contains the **exact same 6 intentional behavioral bugs**.
+CricPulse is an interactive live cricket match center and telemetry analytics application built for sports analysts, team strategists, and fans. It tracks a live T20 World Cup match between India (chasing 211) and Australia (210/7), providing real-time ball-by-ball momentum visualization, sliding window scoring metrics, recent rolling run rates, authenticated player tactical workspaces, rate-limited fan polling, and an interactive partnership network graph.
 
 ---
 
-## Architecture & Technology Stack
+## 1. Application Overview
 
+### Core Functionality
+- **Live Match Center & Telemetry**: Monitor real-time score updates (161/3 in 12.0 overs chasing 211), required run rates, and recent ball-by-ball scoring logs.
+- **Over-by-Over Momentum Analysis**: Visualize run progression across all 12 overs with dynamic bar charts and automated detection of the highest-scoring 6-over scoring stretch.
+- **Rolling Form Run Rate**: Track immediate batting momentum across recent overs to compare active acceleration against the overall match run rate.
+- **Partnership Network Graph**: Interactive SVG network graph displaying undirected batting partnerships between players, supporting reachability traversal and bottleneck strength path analysis.
+- **Player Tactical Workspace**: Secure, authenticated tactical focus note editor restricted strictly to active team players.
+- **Fan Zone Live Polling**: Community engagement poll with token-based session management and per-fan sliding window rate limiting.
+
+### Technology Stack
 - **Language**: Java 17+
-- **Build System**: Apache Maven (`pom.xml`)
 - **Framework**: Spring Boot 3.2.5 (`spring-boot-starter-web`)
 - **Port**: `http://localhost:5000`
-- **Storage**: In-memory state (no external database or network dependencies)
-- **Frontend Assets**: Served from `src/main/resources/static/` (`index.html`, `style.css`, `app.js`)
-
----
-
-## Repository Structure
-
-```text
-cricpulse-java-challenge/
-├── pom.xml                                   # Maven project definition (Java 17, Spring Boot 3.2.5)
-├── challenge.json                            # Environment runtime, port, and command configuration
-├── README.md                                 # Project overview and run guide
-├── AI.md                                     # Bug catalog, architecture, and observation guide
-├── start.sh                                  # Service startup script
-├── src/
-│   ├── main/
-│   │   ├── java/com/cricpulse/
-│   │   │   ├── Application.java              # Spring Boot application entry point
-│   │   │   ├── controller/
-│   │   │   │   ├── MatchController.java      # /api/state, /api/analytics, /api/reachable/{id}
-│   │   │   │   ├── AuthController.java       # /api/login, /api/poll
-│   │   │   │   └── NoteController.java       # /api/player-note
-│   │   │   ├── model/
-│   │   │   │   ├── MatchState.java           # In-memory match state and partnership graph
-│   │   │   │   ├── Player.java               # Player model record
-│   │   │   │   ├── Over.java                 # Over runs record
-│   │   │   │   └── PartnershipLink.java      # Graph partnership link record
-│   │   │   └── service/
-│   │   │       ├── MatchDataService.java     # Seed sample match and focus note state
-│   │   │       ├── BestSixOverService.java   # [Bug 2] Highest-scoring 6-over stretch
-│   │   │       ├── RollingRateService.java   # [Bug 3] Rolling recent run rate
-│   │   │       ├── StrongestChainService.java# [Bug 4] Max-bottleneck partnership path
-│   │   │       ├── PartnershipReachabilityService.java # [Bug 1] Reachable partner traversal
-│   │   │       ├── PlayerAccessService.java  # [Bug 5] Role access control for strategy notes
-│   │   │       └── PollLimiterService.java   # [Bug 6] Sliding window per-fan rate limiter
-│   │   └── resources/
-│   │       ├── application.properties        # server.port=5000
-│   │       └── static/
-│   │           ├── index.html                # Match center frontend dashboard
-│   │           ├── style.css                 # Dark sports analytics theme & graph styling
-│   │           └── app.js                    # Live polling, SVG graph rendering & bug hooks
-│   └── test/
-│       └── java/com/cricpulse/
-│           └── RunTests.java                 # Standalone test runner outputting strict JSON
-└── tests/
-    └── run_tests.sh                          # Compilation and test execution script
-```
-
----
-
-## How to Build and Run
-
-### 1. Compile the Project
-```bash
-mvn clean compile
-```
-
-### 2. Start the Spring Boot Web Server
-```bash
-mvn spring-boot:run
-```
-Or run the provided startup script:
-```bash
-./start.sh
-```
-
-The web dashboard is accessible in your browser at:
-```text
-http://localhost:5000
-```
-
-### 3. Run the Evaluation Tests
-Execute the standalone test suite returning single-line strict JSON telemetry:
-```bash
-./tests/run_tests.sh
-```
-
-Before fixing the bugs, all 6 tests will fail with exit code `1`:
-```json
-{"test_recursive_partnership_scan_visits_all_connected_players":{"Status":"failed","Execution time":"...ms","Error":"Partnership scan missed the second branch"},"test_best_six_over_stretch_includes_overlapping_windows":{"Status":"failed","Execution time":"...ms","Error":"Expected best six-over stretch of 108 runs, got 86"},"test_rolling_run_rate_uses_recent_overs":{"Status":"failed","Execution time":"...ms","Error":"Expected recent three-over rate near 11.33, got 13.416666666666666"},"test_partnership_chain_maximizes_minimum_link":{"Status":"failed","Execution time":"...ms","Error":"Expected strongest chain bottleneck of 30 runs, got 20"},"test_fan_cannot_edit_player_focus_note":{"Status":"failed","Execution time":"...ms","Error":"Fan role must not edit a player-only focus note"},"test_poll_rate_limit_is_per_fan":{"Status":"failed","Execution time":"...ms","Error":"A second fan should have an independent poll allowance"},"Passed":0,"Failed":6,"Total bugs":6,"Total Execution time":"...ms"}
-```
-
-When all 6 bugs are fixed, all tests pass with exit code `0`:
-```json
-{"test_recursive_partnership_scan_visits_all_connected_players":{"Status":"passed","Execution time":"...ms"},"test_best_six_over_stretch_includes_overlapping_windows":{"Status":"passed","Execution time":"...ms"},"test_rolling_run_rate_uses_recent_overs":{"Status":"passed","Execution time":"...ms"},"test_partnership_chain_maximizes_minimum_link":{"Status":"passed","Execution time":"...ms"},"test_fan_cannot_edit_player_focus_note":{"Status":"passed","Execution time":"...ms"},"test_poll_rate_limit_is_per_fan":{"Status":"passed","Execution time":"...ms"},"Passed":6,"Failed":0,"Total bugs":0,"Total Execution time":"...ms"}
-```
-
----
-
-## REST API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/` | Serves static match dashboard (`index.html`) |
-| `GET` | `/api/state` | Returns JSON of match score, overs, players, and partnership links |
-| `GET` | `/api/analytics` | Returns `{ bestSixOverRuns, rollingRunRate, chainStrength, chain }` |
-| `GET` | `/api/reachable/{playerId}` | Returns `{ player_id, reachable: [int...] }` |
-| `POST` | `/api/login` | Authenticates user credentials and issues session token |
-| `POST` | `/api/poll` | Rate-limited fan poll voting endpoint (requires `Authorization: Bearer <token>`) |
-| `GET` | `/api/player-note` | Retrieves the current player tactical focus note |
-| `POST` | `/api/player-note` | Updates player focus note (role restricted to `"player"`) |
+- **Frontend / Styling**: Vanilla JavaScript, semantic HTML5, custom responsive CSS (dark sports analytics theme, native SVG canvas graph)
+- **Testing**: Standalone Java test suite (`RunTests.java`) executed via `./tests/run_tests.sh` outputting strict single-line JSON telemetry
+- **Data Storage**: In-memory match state store (no external database or network dependencies)
 
 ### Demo Accounts
 - **Player**: `user="rohit"`, `password="coverdrive"` (Role: `"player"`, Name: Rohit Sharma)
@@ -121,12 +29,71 @@ When all 6 bugs are fixed, all tests pass with exit code `0`:
 
 ---
 
-## The 6 Intentional Bugs Summary
+## 2. Debugging Challenge
 
-1. **Partnership Reachability Scan** (`PartnershipReachabilityService.java`): DFS returns on the first neighbor, missing sibling branches.
-2. **Best Six-Over Window** (`BestSixOverService.java`): Stride of 6 evaluates non-overlapping blocks (86 runs) rather than overlapping windows (108 runs).
-3. **Rolling Run Rate** (`RollingRateService.java`): Computes entire innings average (13.42) instead of the recent 3-over average (11.33).
-4. **Strongest Partnership Chain** (`StrongestChainService.java`): Unweighted BFS picks the path with fewest hops (bottleneck 20) instead of maximizing minimum bottleneck capacity (bottleneck 30).
-5. **Player Focus Note Access Control** (`PlayerAccessService.java`): Erroneously allows `"fan"` role to modify player-only strategy notes.
-6. **Fan Poll Rate Limiter** (`PollLimiterService.java`): Tracks a single global counter instead of rate-limiting per `userId`.
+QA engineers and early users have flagged several issues in the CricPulse match center platform. Your goal is to investigate the codebase, reproduce each bug, and implement the necessary fixes so that all automated test suites pass.
 
+### Reported Issues & Tasks:
+
+#### Issue 1: Partnership Reachability Scan Misses Teammate Branches
+- **User Symptom**: When an analyst clicks on Rohit Sharma (node 0) in the partnership network graph, the dashboard displays an orange warning: *"Reachable from Rohit: only Kohli (1/5 teammates). Sibling branches missed!"*. The graph traversal terminates prematurely after visiting only the first neighbor, missing teammates across other connected branches.
+- **Task**: Fix the graph traversal so that clicking any player explores all reachable branches and returns all connected teammates in the player's partnership network component.
+
+#### Issue 2: Best Six-Over Stretch Calculation Skips Overlapping Windows
+- **User Symptom**: On the "Run rate, over by over" momentum card, the *"BEST 6 OVERS"* badge displays only 86 runs (evaluating discrete blocks: overs 1–6). Analysts point out that the team experienced a major scoring surge between overs 3 and 8 totaling 108 runs, which the system fails to detect.
+- **Task**: Update the sliding window calculation so that it evaluates every contiguous 6-over window across the match to discover the true maximum scoring stretch (108 runs).
+
+#### Issue 3: Rolling Run Rate Displays Full Match Average Instead of Recent Form
+- **User Symptom**: The "LIVE FORM / Rolling run rate" sidebar card displays `13.42 / over`, which reflects the total innings run rate across all 12 overs rather than active batting momentum. Analysts expect the card to reflect the team's immediate form over recent overs.
+- **Task**: Modify the rolling run rate calculation to compute the average run rate strictly over the most recent 3 completed overs (~11.33 runs/over).
+
+#### Issue 4: Strongest Partnership Chain Favors Fewest Hops Over Highest Strength
+- **User Symptom**: The partnership chain analyzer highlights a route from Rohit to Jadeja through Kohli (`0 → 1 → 5`) reporting a bottleneck of 20 runs. However, a stronger link path exists through Gill and Hardik (`0 → 2 → 4 → 5`) with a bottleneck strength of 30 runs. The algorithm erroneously selects the shortest path by hop count rather than the path with the strongest minimum link.
+- **Task**: Implement a maximum-bottleneck path discovery algorithm to identify the partnership chain that maximizes the strength of the weakest link between the selected players (30 runs bottleneck).
+
+#### Issue 5: Fan Accounts Are Permitted to Edit Player Strategy Notes
+- **User Symptom**: When a user logs in with a fan account (e.g., "Fan 1 (Aarav)") and clicks "Save note" in the Player Workspace, the system allows the submission and displays: *"Saved! (Bug: Fan was allowed to edit player note)"*. Internal team strategy notes should be protected from unauthorized edits by non-players.
+- **Task**: Enforce role-based access control so that only users with the `"player"` role can modify the player focus note, rejecting fan submissions with an authorization error (HTTP 403 Forbidden).
+
+#### Issue 6: Fan Poll Rate Limiter Locks Out All Users When One Fan Hits Quota
+- **User Symptom**: When Fan 1 votes 3 times and reaches their voting limit, switching to Fan 2 and attempting to vote immediately fails with HTTP 429: *"Poll limit reached: Rate limit blocked Riya Sen!"*. The rate limiter shares a global counter across all requests instead of tracking allowances independently per user.
+- **Task**: Update the rate limiter to enforce submission limits independently per `userId`, ensuring every fan receives their own full voting quota within the active time window.
+
+---
+
+## 3. Expected Behavior After Fixing Bugs
+
+After resolving the issues:
+1. Clicking any player in the partnership network scans and highlights all connected teammates across all network branches (all 5 teammates for player 0).
+2. The momentum stretch badge and chart highlight the true maximum 6-over scoring interval across all overlapping windows (108 runs).
+3. The rolling run rate accurately reflects recent batting momentum over the last 3 overs (~11.33 runs/over).
+4. The strongest partnership chain identifies the path that maximizes the weakest shared partnership link (30 runs bottleneck).
+5. Player workspace strategy notes are protected, allowing only authenticated player accounts to update them while rejecting fan submissions with HTTP 403 Forbidden.
+6. Fan poll voting enforces an independent 3-vote limit per fan without cross-user interference.
+7. All automated tests in `tests/run_tests.sh` pass with exit code `0`.
+
+---
+
+## 4. How to Build, Run & Test
+
+### Compile the Application
+```bash
+mvn clean compile
+```
+
+### Start the Live Server
+```bash
+mvn spring-boot:run
+```
+Or execute:
+```bash
+./start.sh
+```
+Access the dashboard at `http://localhost:5000`.
+
+### Run Automated Tests
+```bash
+./tests/run_tests.sh
+```
+- Initial state (with 6 bugs): Fails with exit code `1` and outputs strict single-line JSON test telemetry.
+- Resolved state (all bugs fixed): Passes with exit code `0` and reports `{"Passed": 6, "Failed": 0, ...}`.
